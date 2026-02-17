@@ -46,7 +46,7 @@ const reports: Report[] = [
     contactName: 'Alice Johnson',
     contactEmail: 'alice@example.com',
     status: 'NEW',
-    createdAt: Date.now() - 86400000 * 3, // 3 days ago
+    createdAt: Date.now() - 86400000 * 3,
     attachmentUrl: '/uploads/placeholder.txt'
   },
   {
@@ -56,8 +56,8 @@ const reports: Report[] = [
     contactName: 'Bob Smith',
     contactEmail: 'bob@example.com',
     status: 'APPROVED',
-    createdAt: Date.now() - 86400000 * 5, // 5 days ago
-    approvedAt: Date.now() - 86400000 * 2, // 2 days ago
+    createdAt: Date.now() - 86400000 * 5,
+    approvedAt: Date.now() - 86400000 * 2,
     attachmentUrl: '/uploads/placeholder.txt'
   },
   {
@@ -67,8 +67,8 @@ const reports: Report[] = [
     contactName: 'Carol Davis',
     contactEmail: 'carol@example.com',
     status: 'RESOLVED',
-    createdAt: Date.now() - 86400000 * 7, // 7 days ago
-    approvedAt: Date.now() - 86400000 * 4, // 4 days ago
+    createdAt: Date.now() - 86400000 * 7,
+    approvedAt: Date.now() - 86400000 * 4,
     attachmentUrl: '/uploads/placeholder.txt'
   }
 ];

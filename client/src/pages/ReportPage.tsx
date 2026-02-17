@@ -54,6 +54,7 @@ export function ReportPage() {
             id="issueType"
             value={issueType}
             onChange={(e) => setIssueType(e.target.value)}
+            placeholder="Select issue type (replace with dropdown)"
           />
         </div>
 
