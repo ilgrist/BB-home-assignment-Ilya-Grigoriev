@@ -31,11 +31,38 @@ class ApiClient {
     return response.json();
   }
 
+  private async requestFormData<T>(
+    endpoint: string,
+    formData: FormData,
+  ): Promise<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
   async getReports(): Promise<Report[]> {
     return this.request<Report[]>("/api/reports");
   }
 
   async createReport(payload: CreateReportPayload): Promise<Report> {
+    if (payload.attachment) {
+      const formData = new FormData();
+      formData.append('issueType', payload.issueType);
+      formData.append('description', payload.description);
+      formData.append('contactName', payload.contactName);
+      formData.append('contactEmail', payload.contactEmail);
+      formData.append('attachment', payload.attachment);
+      return this.requestFormData<Report>("/api/reports", formData);
+    }
+
     return this.request<Report>("/api/reports", {
       method: "POST",
       body: JSON.stringify(payload),

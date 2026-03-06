@@ -1,6 +1,8 @@
+export type IssueType = 'Bug' | 'Feature Request' | 'Improvement' | 'Documentation' | 'Other';
+
 export interface Report {
   id: string;
-  issueType: string;
+  issueType: IssueType;
   description: string;
   contactName: string;
   contactEmail: string;
@@ -11,8 +13,17 @@ export interface Report {
 }
 
 export interface CreateReportPayload {
-  issueType: string;
+  issueType: IssueType;
   description: string;
   contactName: string;
   contactEmail: string;
+  attachment?: File;
+}
+
+export interface ReportFormData {
+  issueType: IssueType;
+  description: string;
+  contactName: string;
+  contactEmail: string;
+  attachment?: File;
 }
