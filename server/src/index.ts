@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -8,6 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+const upload = multer({ storage: multer.memoryStorage() });
 const PORT = 4000;
 
 app.use(cors({
@@ -96,7 +99,7 @@ app.get('/api/reports', (_req: Request, res: Response) => {
   res.json(reports);
 });
 
-app.post('/api/reports', (req: Request, res: Response) => {
+app.post('/api/reports', upload.single('attachment'), (req: Request, res: Response) => {
   const { issueType, description, contactName, contactEmail } = req.body;
 
   const newReport: Report = {
@@ -107,7 +110,7 @@ app.post('/api/reports', (req: Request, res: Response) => {
     contactEmail: contactEmail || '',
     status: 'NEW',
     createdAt: Date.now(),
-    attachmentUrl: '/uploads/placeholder.txt'
+    attachmentUrl: req.file ? `/uploads/${uuidv4()}-${req.file.originalname}` : '/uploads/placeholder.txt'
   };
 
   reports.push(newReport);
