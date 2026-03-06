@@ -1,7 +1,7 @@
-import { useState, FormEvent } from 'react';
+import { useState, useRef, FormEvent } from 'react';
 import { apiClient } from '../api/client';
 import { CreateReportPayload, IssueType, ReportFormData } from '../types/Report';
-import { validateEmail, validateText } from '../helpers/formHelper';
+import { validateEmail, validateText, validateFile } from '../helpers/formHelper';
 
 const ISSUE_TYPES: IssueType[] = ['Bug', 'Feature Request', 'Improvement', 'Documentation', 'Other'];
 
@@ -20,20 +20,28 @@ export function ReportPage() {
   });
   
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({ type: 'idle' });
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const descriptionError = validateText(formData.description, 3);
   const nameError = validateText(formData.contactName, 3);
   const emailError = validateEmail(formData.contactEmail);
+  const fileError = formData.attachment ? validateFile(formData.attachment) : null;
 
-  const isFormValid = 
+  const isFormValid =
       formData.issueType &&
       !descriptionError &&
       !nameError &&
-      !emailError;
-  
+      !emailError &&
+      !fileError;
 
-  const updateFormData = (field: keyof typeof formData, value: string) => {
+  const updateFormData = <K extends keyof ReportFormData>(field: K, value: ReportFormData[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleClearFile = () => {
+    updateFormData('attachment', undefined);
+    const fileInput = document.getElementById('attachment') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -49,6 +57,7 @@ export function ReportPage() {
         description: formData.description,
         contactName: formData.contactName,
         contactEmail: formData.contactEmail,
+        attachment: formData.attachment,
       };
 
       const response = await apiClient.createReport(payload);
@@ -65,6 +74,8 @@ export function ReportPage() {
         contactEmail: '',
         attachment: undefined,
       });
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      
     } catch (error) {
       setSubmitStatus({
         type: 'error',
@@ -95,7 +106,7 @@ export function ReportPage() {
           <select
             id="issueType"
             value={formData.issueType}
-            onChange={(e) => updateFormData('issueType', e.target.value)}
+            onChange={(e) => updateFormData('issueType', e.target.value as IssueType)}
             required
           >
             {ISSUE_TYPES.map(type => (
@@ -157,14 +168,36 @@ export function ReportPage() {
 
         <div className="form-group">
           <label htmlFor="attachment">Attachment (optional)</label>
-          <input
-            type="file"
-            id="attachment"
-            disabled
-            title="TODO: Implement file upload"
-          />
+          <div className="file-input-wrapper">
+            <input
+              type="file"
+              id="attachment"
+              ref={fileInputRef}
+              onChange={(e) => updateFormData('attachment', e.target.files?.[0])}
+              accept=".png,.jpg,.jpeg,.pdf"
+            />
+          </div>
+          {fileError && (
+            <span className="validation-error">
+              {fileError}
+            </span>
+          )}
+          {formData.attachment && (
+            <div className="file-selected">
+              <span className="file-name">{formData.attachment.name}</span>
+              <span className="file-size">({(formData.attachment.size / 1024).toFixed(1)} KB)</span>
+              <button
+                type="button"
+                className="btn-clear-file"
+                onClick={handleClearFile}
+                title="Remove file"
+              >
+                ✕
+              </button>
+            </div>
+          )}
           <small className="form-hint">
-            TODO: Implement attachment upload (PNG, JPG, PDF, max 5MB)
+            Allowed: PNG, JPG, PDF (max 5MB)
           </small>
         </div>
 

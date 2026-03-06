@@ -43,6 +43,8 @@ interface UserStatusResponse {
   reason?: string;
 }
 
+type ReportCreateResponse = Pick<Report, 'id' | 'status' | 'createdAt' | 'approvedAt'>;
+
 // In-memory storage
 const reports: Report[] = [
   {
@@ -94,7 +96,6 @@ app.get('/api/reports', (_req: Request, res: Response) => {
   res.json(reports);
 });
 
-// POST /api/reports - Create a new report
 app.post('/api/reports', (req: Request, res: Response) => {
   const { issueType, description, contactName, contactEmail } = req.body;
 
@@ -110,7 +111,15 @@ app.post('/api/reports', (req: Request, res: Response) => {
   };
 
   reports.push(newReport);
-  res.status(201).json(newReport);
+
+  const response: ReportCreateResponse = {
+    id: newReport.id,
+    status: newReport.status,
+    createdAt: newReport.createdAt,
+    approvedAt: newReport.approvedAt
+  };
+
+  res.status(201).json(response);
 });
 
 // Health check
