@@ -81,4 +81,8 @@ function validateField(value: string): string[] {
 I noticed it while refactoring the validation methods. It had no bearing on the code apart from making each form keystroke extremely resource heavy.
 
 ### Fix
-I removed the unnessesary loop. I also added a debounce to the form fields in order to avoid excessive page refrehses.
+I removed the unnessesary loop in order to reduce validation costs. I also added a debounce to the form fields in order to decrease validation frequency.
+
+### Impact
+Previously, the form lagged significantly.
+It is now responsive.

@@ -2,6 +2,7 @@ import { useState, useRef, FormEvent } from 'react';
 import { apiClient } from '../api/client';
 import { CreateReportPayload, IssueType, ReportFormData } from '../types/Report';
 import { validateEmail, validateText, validateFile } from '../helpers/formHelper';
+import { useDebounce } from '../hooks/useDebounce';
 
 const ISSUE_TYPES: IssueType[] = ['Bug', 'Feature Request', 'Improvement', 'Documentation', 'Other'];
 
@@ -22,9 +23,13 @@ export function ReportPage() {
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({ type: 'idle' });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const descriptionError = validateText(formData.description, 3);
-  const nameError = validateText(formData.contactName, 3);
-  const emailError = validateEmail(formData.contactEmail);
+  const debouncedDescription = useDebounce(formData.description, 400);
+  const debouncedContactName = useDebounce(formData.contactName, 400);
+  const debouncedContactEmail = useDebounce(formData.contactEmail, 400);
+
+  const descriptionError = validateText(debouncedDescription, 3);
+  const nameError = validateText(debouncedContactName, 3);
+  const emailError = validateEmail(debouncedContactEmail);
   const fileError = formData.attachment ? validateFile(formData.attachment) : null;
 
   const isFormValid =
