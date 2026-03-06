@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Report } from '../types/Report';
 import { apiClient } from '../api/client';
+import { formatDate } from '../helpers/commonHelper';
+
+/* 
+TODOS
+- Add skeleton laoder for table
+- Account for many reports?
+**/
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
-
-function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-}
 
 function StatusBadge({ status }: { status: Report['status'] }) {
   const modifier = status.toLowerCase();
