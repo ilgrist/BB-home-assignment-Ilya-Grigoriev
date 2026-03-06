@@ -44,18 +44,25 @@ function AppContent() {
                     Report Bug
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    to="/reports"
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                  >
-                    Reports List
-                  </NavLink>
-                </li>
+                {user.status === "admin" && (
+                  <li>
+                    <NavLink
+                      to="/reports"
+                      className={({ isActive }) => (isActive ? "active" : "")}
+                    >
+                      Reports List
+                    </NavLink>
+                  </li>
+                )}
                 <li className="user-info">
                   <span>Welcome, {user.email}</span>
-                  {user.status === 'admin' && <span className="admin-badge">Admin</span>}
-                  <button onClick={handleLogout} className="btn btn-secondary btn-sm">
+                  {user.status === "admin" && (
+                    <span className="admin-badge">Admin</span>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className="btn btn-secondary btn-sm"
+                  >
                     Logout
                   </button>
                 </li>
@@ -79,7 +86,7 @@ function AppContent() {
             <Route
               path="/reports"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requireAdmin>
                   <ReportsPage />
                 </ProtectedRoute>
               }

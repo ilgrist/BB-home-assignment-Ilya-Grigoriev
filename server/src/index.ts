@@ -82,6 +82,7 @@ const reports: Report[] = [
 // TODO implement basic auth with password
 const userStatuses: UserStatusEntry[] = [
   { email: 'admin@example.com', status: 'admin' },
+  { email: 'user@example.com', status: 'allowed' },
   { email: 'blocked@example.com', status: 'blacklisted', reason: 'Account suspended due to policy violation' },
   { email: 'spam@test.com', status: 'blacklisted', reason: 'Multiple spam reports received' }
 ];
