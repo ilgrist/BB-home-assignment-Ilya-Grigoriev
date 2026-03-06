@@ -36,6 +36,12 @@ interface UserStatusEntry {
   status: 'allowed' | 'blacklisted' | 'admin';
   reason?: string;
 }
+type UserStatus = 'allowed' | 'blacklisted' | 'admin';
+
+interface UserStatusResponse {
+  status: UserStatus;
+  reason?: string;
+}
 
 // In-memory storage
 const reports: Report[] = [
@@ -73,6 +79,7 @@ const reports: Report[] = [
   }
 ];
 
+// TODO implement basic auth with password
 const userStatuses: UserStatusEntry[] = [
   { email: 'admin@example.com', status: 'admin' },
   { email: 'blocked@example.com', status: 'blacklisted', reason: 'Account suspended due to policy violation' },
@@ -109,6 +116,30 @@ app.post('/api/reports', (req: Request, res: Response) => {
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok' });
 });
+
+// Check User status
+app.post('/api/check-status', (_req: Request, res: Response) => {
+  const { email } = _req.body;
+
+  if (typeof email !== 'string') {
+    return res.status(400).json({ error: 'Email parameter is required' });
+  };
+
+  const user = userStatuses.find(entry => entry.email === email);
+
+  if(!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  const response : UserStatusResponse = { status: user.status };
+  if(user.status === 'blacklisted' && user.reason) {
+    response.reason = user.reason;
+  }
+
+  res.json(response);
+});
+
+
 
 // Start server
 app.listen(PORT, () => {

@@ -1,6 +1,8 @@
-import { Report, CreateReportPayload } from '../types/Report';
+import { Report, CreateReportPayload } from "../types/Report";
+import { UserCheckStatusResponse } from "../types/User";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 
 class ApiClient {
   private baseUrl: string;
@@ -11,13 +13,13 @@ class ApiClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const response = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
     });
@@ -30,14 +32,26 @@ class ApiClient {
   }
 
   async getReports(): Promise<Report[]> {
-    return this.request<Report[]>('/api/reports');
+    return this.request<Report[]>("/api/reports");
   }
 
   async createReport(payload: CreateReportPayload): Promise<Report> {
-    return this.request<Report>('/api/reports', {
-      method: 'POST',
+    return this.request<Report>("/api/reports", {
+      method: "POST",
       body: JSON.stringify(payload),
     });
+  }
+
+  async checkUserStatus(
+    email: string,
+  ): Promise<UserCheckStatusResponse> {
+    return this.request<UserCheckStatusResponse>(
+      `/api/check-status`,
+      {
+        method: "POST",
+        body: JSON.stringify({ email })
+      }
+    );
   }
 }
 

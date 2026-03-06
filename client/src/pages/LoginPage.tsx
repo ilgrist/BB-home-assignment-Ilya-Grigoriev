@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import { apiClient } from '../api/client';
 
 export function LoginPage() {
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/report');
+    const userStatus = await apiClient.checkUserStatus((e.target as any).email.value);
+    
+    // navigate('/report');
   };
 
   return (
