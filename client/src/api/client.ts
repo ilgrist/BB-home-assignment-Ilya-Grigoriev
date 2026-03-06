@@ -69,6 +69,13 @@ class ApiClient {
     });
   }
 
+  async updateReport(id: string, updates: Partial<Report>): Promise<Report> {
+    return this.request<Report>(`/api/reports/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(updates),
+    });
+  }
+
   async checkUserStatus(
     email: string,
   ): Promise<UserCheckStatusResponse> {

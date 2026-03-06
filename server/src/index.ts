@@ -122,6 +122,23 @@ app.post('/api/reports', (req: Request, res: Response) => {
   res.status(201).json(response);
 });
 
+app.put('/api/reports/:id', (req: Request, res: Response) => {
+  const index = reports.findIndex(r => r.id === req.params.id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Report not found' });
+  }
+
+  const updates: Partial<Report> = req.body;
+  const updatedReport: Report = { ...reports[index], ...updates };
+
+  if (updates.status === 'APPROVED') {
+    updatedReport.approvedAt = Date.now();
+  }
+
+  reports[index] = updatedReport;
+  res.json(updatedReport);
+});
+
 // Health check
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok' });
