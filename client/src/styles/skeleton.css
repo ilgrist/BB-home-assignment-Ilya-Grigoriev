@@ -1,0 +1,18 @@
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  display: block;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+  height: 1rem;
+}
+
+.skeleton--xs { width: 3rem; }
+.skeleton--sm { width: 6rem; }
+.skeleton--md { width: 9rem; }
+.skeleton--lg { width: 12rem; }

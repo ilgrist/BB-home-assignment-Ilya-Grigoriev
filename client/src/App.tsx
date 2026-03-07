@@ -12,63 +12,48 @@ import { UserProvider, useUser } from "./contexts/UserContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import "./App.css";
 
+const navActiveClass = ({ isActive }: { isActive: boolean }) =>
+  isActive ? "active" : "";
+
 function AppContent() {
   const { user, isAdmin, logout } = useUser();
 
-  const handleLogout = () => {
-    logout();
-  };
+  const navLinks = user ? (
+    <>
+      <li>
+        <NavLink to="/report" className={navActiveClass}>
+          Report Bug
+        </NavLink>
+      </li>
+      {isAdmin && (
+        <li>
+          <NavLink to="/reports" className={navActiveClass}>
+            Reports List
+          </NavLink>
+        </li>
+      )}
+      <li className="user-info">
+        <span>Welcome, {user.email}</span>
+        {isAdmin && <span className="admin-badge">Admin</span>}
+        <button onClick={logout} className="btn btn-secondary btn-sm">
+          Logout
+        </button>
+      </li>
+    </>
+  ) : (
+    <li>
+      <NavLink to="/login" className={navActiveClass}>
+        Login
+      </NavLink>
+    </li>
+  );
 
   return (
     <BrowserRouter>
       <div className="app">
         <nav className="nav">
           <div className="nav-brand">🐛 Bug Reporter</div>
-          <ul className="nav-links">
-            {!user ? (
-              <li>
-                <NavLink
-                  to="/login"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                >
-                  Login
-                </NavLink>
-              </li>
-            ) : (
-              <>
-                <li>
-                  <NavLink
-                    to="/report"
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                  >
-                    Report Bug
-                  </NavLink>
-                </li>
-                {isAdmin && (
-                  <li>
-                    <NavLink
-                      to="/reports"
-                      className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                      Reports List
-                    </NavLink>
-                  </li>
-                )}
-                <li className="user-info">
-                  <span>Welcome, {user.email}</span>
-                  {isAdmin && (
-                    <span className="admin-badge">Admin</span>
-                  )}
-                  <button
-                    onClick={handleLogout}
-                    className="btn btn-secondary btn-sm"
-                  >
-                    Logout
-                  </button>
-                </li>
-              </>
-            )}
-          </ul>
+          <ul className="nav-links">{navLinks}</ul>
         </nav>
 
         <main className="main">
