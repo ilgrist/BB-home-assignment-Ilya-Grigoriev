@@ -5,3 +5,6 @@
 @import './styles/alerts.css';
 @import './styles/skeleton.css';
 @import './styles/reports.css';
+@import './styles/reports-table.css';
+@import './styles/report-card.css';
+@import './styles/view-toggle.css';

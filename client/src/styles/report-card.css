@@ -1,0 +1,87 @@
+.reports-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.reports-cards-grid--desktop-hidden {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .reports-cards-grid {
+    display: grid !important;
+    grid-template-columns: 1fr;
+  }
+}
+
+.report-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface, #fff);
+}
+
+.report-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.report-card__issue-type {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.report-card__description {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  overflow: hidden;
+}
+
+.report-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.report-card__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.report-card__contact-name {
+  font-weight: 500;
+}
+
+.report-card__contact-email {
+  color: var(--text-muted);
+}
+
+.report-card__dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  color: var(--text-muted);
+}
+
+.report-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.report-card__attachment {
+  font-size: 0.8rem;
+}
