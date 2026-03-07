@@ -13,7 +13,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import "./App.css";
 
 function AppContent() {
-  const { user, logout } = useUser();
+  const { user, isAdmin, logout } = useUser();
 
   const handleLogout = () => {
     logout();
@@ -44,7 +44,7 @@ function AppContent() {
                     Report Bug
                   </NavLink>
                 </li>
-                {user.status === "admin" && (
+                {isAdmin && (
                   <li>
                     <NavLink
                       to="/reports"
@@ -56,7 +56,7 @@ function AppContent() {
                 )}
                 <li className="user-info">
                   <span>Welcome, {user.email}</span>
-                  {user.status === "admin" && (
+                  {isAdmin && (
                     <span className="admin-badge">Admin</span>
                   )}
                   <button

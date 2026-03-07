@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
-  const { user, isInitializing } = useUser();
+  const { user, isAdmin, isInitializing } = useUser();
 
   if (isInitializing) {
     return null;
@@ -18,7 +18,7 @@ export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRout
     return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && user.status !== 'admin') {
+  if (requireAdmin && !isAdmin) {
     return <Navigate to="/report" replace />;
   }
 

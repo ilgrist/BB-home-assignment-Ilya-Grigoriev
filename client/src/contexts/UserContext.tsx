@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { UserCheckStatusResponse } from '../types/User';
 import { checkUserStatus } from '../api/users';
 
@@ -8,6 +8,7 @@ export interface User extends UserCheckStatusResponse {
 
 interface UserContextType {
   user: User | null;
+  isAdmin: boolean;
   login: (email: string) => Promise<UserCheckStatusResponse>;
   logout: () => void;
   isLoading: boolean;
@@ -66,8 +67,11 @@ export function UserProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(USER_STORAGE_KEY);
   };
 
+  const isAdmin = user?.status === 'admin';
+
   const value: UserContextType = {
     user,
+    isAdmin,
     login,
     logout,
     isLoading,
