@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Report } from '../types/Report';
-import { apiClient } from '../api/client';
+import { getReports, updateReport } from '../api/reports';
 import { formatDate } from '../helpers/commonHelper';
 
 /* 
@@ -28,7 +28,7 @@ export function ReportsPage() {
     setLoading(true);
     setError(null);
     try {
-      const data = await apiClient.getReports();
+      const data = await getReports();
       setReports(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load reports');
@@ -44,7 +44,7 @@ export function ReportsPage() {
   const handleUpdate = async (id: string, updates: Partial<Report>) => {
     setActionLoading(prev => ({ ...prev, [id]: true }));
     try {
-      const updated = await apiClient.updateReport(id, updates);
+      const updated = await updateReport(id, updates);
       setReports(prev => prev.map(r => r.id === id ? updated : r));
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Action failed');

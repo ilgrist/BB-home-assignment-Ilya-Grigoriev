@@ -1,5 +1,5 @@
 import { useState, useRef, FormEvent } from 'react';
-import { apiClient } from '../api/client';
+import { createReport } from '../api/reports';
 import { CreateReportPayload, IssueType, ReportFormData } from '../types/Report';
 import { validateEmail, validateText, validateFile } from '../helpers/formHelper';
 import { useDebounce } from '../hooks/useDebounce';
@@ -65,7 +65,7 @@ export function ReportPage() {
         attachment: formData.attachment,
       };
 
-      const response = await apiClient.createReport(payload);
+      const response = await createReport(payload);
       setSubmitStatus({
         type: 'success',
         message: `Report submitted successfully! (ID: ${response.id})`

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { UserCheckStatusResponse } from '../types/User';
-import { apiClient } from '../api/client';
+import { checkUserStatus } from '../api/users';
 
 export interface User extends UserCheckStatusResponse {
   email: string;
@@ -40,7 +40,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const login = async (email: string): Promise<UserCheckStatusResponse> => {
     setIsLoading(true);
     try {
-      const statusResponse = await apiClient.checkUserStatus(email);
+      const statusResponse = await checkUserStatus(email);
 
       if (statusResponse.status === 'blacklisted') {
         // Don't set user if blacklisted
