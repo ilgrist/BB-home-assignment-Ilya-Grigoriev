@@ -34,7 +34,6 @@ body {
 .main {
   flex: 1;
   padding: 2rem;
-  max-width: 800px;
   margin: 0 auto;
   width: 100%;
 }
@@ -50,4 +49,14 @@ body {
   margin-top: 0;
   margin-bottom: 1.5rem;
   color: var(--text);
+}
+
+@media (max-width: 800px) {
+  .main {
+    padding: 1rem;
+  }
+
+  .page {
+    padding: 1.25rem;
+  }
 }

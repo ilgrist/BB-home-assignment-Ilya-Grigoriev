@@ -20,18 +20,20 @@ function AppContent() {
 
   const navLinks = user ? (
     <>
-      <li>
-        <NavLink to="/report" className={navActiveClass}>
-          Report Bug
-        </NavLink>
-      </li>
-      {isAdmin && (
+      <div className="page-links">
         <li>
-          <NavLink to="/reports" className={navActiveClass}>
-            Reports List
+          <NavLink to="/report" className={navActiveClass}>
+            Report Bug
           </NavLink>
         </li>
-      )}
+        {isAdmin && (
+          <li>
+            <NavLink to="/reports" className={navActiveClass}>
+              Reports List
+            </NavLink>
+          </li>
+        )}
+      </div>
       <li className="user-info">
         <span>Welcome, {user.email}</span>
         {isAdmin && <span className="admin-badge">Admin</span>}
@@ -52,7 +54,9 @@ function AppContent() {
     <BrowserRouter>
       <div className="app">
         <nav className="nav">
-          <div className="nav-brand">🐛 Bug Reporter</div>
+          <div className="nav-brand">
+            🐛 <span>Bug Reporter</span>
+          </div>
           <ul className="nav-links">{navLinks}</ul>
         </nav>
 

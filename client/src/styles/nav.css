@@ -19,6 +19,8 @@
   display: flex;
   gap: 1.5rem;
   align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
 }
 
 .nav-links a {
@@ -38,6 +40,11 @@
   border-bottom-color: var(--primary);
 }
 
+.page-links {
+  display: flex;
+  gap: 1rem;
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -52,4 +59,20 @@
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+/* Mobile Styles */
+@media (max-width: 800px) {
+  .nav {
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+  }
+
+  .nav-brand span {
+    display: none;
+  }
+
+  .user-info > span:first-child {
+    display: none;
+  }
 }
