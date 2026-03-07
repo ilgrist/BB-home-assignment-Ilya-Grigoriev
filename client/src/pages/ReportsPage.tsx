@@ -5,6 +5,9 @@ import { formatDate } from '../helpers/commonHelper';
 import { ReportsTableSkeleton } from '../components/Report/ReportsTableSkeleton';
 import { ReportsTableError } from '../components/Report/ReportsTableError';
 import { ReportsTableEmpty } from '../components/Report/ReportsTableEmpty';
+import { ReportsTable } from '../components/Report/ReportsTable';
+import { StatusBadge } from '../components/Report/StatusBadge';
+import { ViewToggle, ViewMode } from '../components/Report/ViewToggle';
 
 /*
 TODOS
@@ -13,10 +16,65 @@ TODOS
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 
-function StatusBadge({ status }: { status: Report['status'] }) {
-  const modifier = status.toLowerCase();
+function ReportCard({
+  report,
+  actionLoading,
+  onUpdate,
+}: {
+  report: Report;
+  actionLoading: boolean;
+  onUpdate: (id: string, updates: Partial<Report>) => void;
+}) {
   return (
-    <span className={`status-badge status-badge--${modifier}`}>{status}</span>
+    <div className="report-card">
+      <div className="report-card__header">
+        <span className="report-card__issue-type">{report.issueType}</span>
+        <StatusBadge status={report.status} />
+      </div>
+      <p className="report-card__description" title={report.description}>
+        {report.description}
+      </p>
+      <div className="report-card__meta">
+        <div className="report-card__contact">
+          <span className="report-card__contact-name">{report.contactName}</span>
+          <span className="report-card__contact-email">{report.contactEmail}</span>
+        </div>
+        <div className="report-card__dates">
+          <span>Created: {formatDate(report.createdAt)}</span>
+          {report.approvedAt && <span>Approved: {formatDate(report.approvedAt)}</span>}
+        </div>
+      </div>
+      <div className="report-card__footer">
+        <a
+          className="report-card__attachment"
+          href={`${API_BASE_URL}${report.attachmentUrl}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View attachment
+        </a>
+        <div className="report-actions">
+          {report.status === 'NEW' && (
+            <button
+              className="btn btn-primary btn-sm"
+              disabled={actionLoading}
+              onClick={() => onUpdate(report.id, { status: 'APPROVED' })}
+            >
+              {actionLoading ? 'Approving...' : 'Approve'}
+            </button>
+          )}
+          {report.status !== 'RESOLVED' && (
+            <button
+              className="btn btn-secondary btn-sm"
+              disabled={actionLoading}
+              onClick={() => onUpdate(report.id, { status: 'RESOLVED' })}
+            >
+              {actionLoading ? 'Resolving...' : 'Resolve'}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -25,6 +83,7 @@ export function ReportsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<Record<string, boolean>>({});
+  const [viewMode, setViewMode] = useState<ViewMode>('table');
 
   const fetchReports = async () => {
     setLoading(false);
@@ -57,80 +116,36 @@ export function ReportsPage() {
 
   return (
     <div className="page">
-      <h1>Reports List</h1>
+      <div className="reports-page-header">
+        <h1>Reports List</h1>
+        <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+      </div>
 
       {loading && <ReportsTableSkeleton />}
 
-      {error && !loading &&  <ReportsTableError message={error} onRetry={fetchReports} />}
+      {error && !loading && <ReportsTableError message={error} onRetry={fetchReports} />}
 
       {!loading && !error && reports.length === 0 && <ReportsTableEmpty />}
 
       {!loading && !error && reports.length > 0 && (
-        <div className="reports-table-wrapper">
-          <table className="reports-table">
-            <thead>
-              <tr>
-                <th>Issue Type</th>
-                <th>Description</th>
-                <th>Contact</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Approved</th>
-                <th>Attachment</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reports.map(report => (
-                <tr key={report.id}>
-                  <td>{report.issueType}</td>
-                  <td>
-                    <span className="report-description" title={report.description}>
-                      {report.description}
-                    </span>
-                  </td>
-                  <td>
-                    <div>{report.contactName}</div>
-                    <div className="report-contact-email">{report.contactEmail}</div>
-                  </td>
-                  <td>
-                    <StatusBadge status={report.status} />
-                  </td>
-                  <td>{formatDate(report.createdAt)}</td>
-                  <td>{report.approvedAt ? formatDate(report.approvedAt) : '—'}</td>
-                  <td>
-                    <a
-                      href={`${API_BASE_URL}${report.attachmentUrl}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      View
-                    </a>
-                  </td>
-                  <td className="report-actions">
-                    {report.status === 'NEW' && (
-                      <button
-                        className="btn btn-primary btn-sm"
-                        disabled={actionLoading[report.id]}
-                        onClick={() => handleUpdate(report.id, { status: 'APPROVED' })}
-                      >
-                        {actionLoading[report.id] ? 'Approving...' : 'Approve'}
-                      </button>
-                    )}
-                    {report.status !== 'RESOLVED' && (
-                      <button
-                        className="btn btn-secondary btn-sm"
-                        disabled={actionLoading[report.id]}
-                        onClick={() => handleUpdate(report.id, { status: 'RESOLVED' })}
-                      >
-                        {actionLoading[report.id] ? 'Resolving...' : 'Resolve'}
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <ReportsTable
+          reports={reports}
+          actionLoading={actionLoading}
+          onUpdate={handleUpdate}
+          hidden={viewMode === 'cards'}
+        />
+      )}
+
+      {!loading && !error && reports.length > 0 && (
+        <div className={`reports-cards-grid${viewMode === 'table' ? ' reports-cards-grid--desktop-hidden' : ''}`}>
+          {reports.map(report => (
+            <ReportCard
+              key={report.id}
+              report={report}
+              actionLoading={actionLoading[report.id] ?? false}
+              onUpdate={handleUpdate}
+            />
+          ))}
         </div>
       )}
     </div>
