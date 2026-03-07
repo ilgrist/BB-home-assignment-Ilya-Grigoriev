@@ -6,7 +6,6 @@ import multer from 'multer';
 const upload = multer({ storage: multer.memoryStorage() });
 const router = express.Router();
 
-// GET /api/reports - Get all reports
 router.get('/', (_req: Request, res: Response) => {
   res.json(reports);
 });

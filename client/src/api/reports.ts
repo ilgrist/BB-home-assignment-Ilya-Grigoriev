@@ -1,11 +1,11 @@
-import { Report, CreateReportPayload } from "../types/Report";
+import { Report, ReportFormData } from "../types/Report";
 import { request, requestFormData } from "./http";
 
 export async function getReports(): Promise<Report[]> {
   return request<Report[]>("/api/reports");
 }
 
-export async function createReport(payload: CreateReportPayload): Promise<Report> {
+export async function createReport(payload: ReportFormData): Promise<Report> {
   if (payload.attachment) {
     const formData = new FormData();
     formData.append("issueType", payload.issueType);

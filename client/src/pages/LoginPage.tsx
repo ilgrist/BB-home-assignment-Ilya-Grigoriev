@@ -6,12 +6,6 @@ export function LoginPage() {
   const navigate = useNavigate();
   const { login, isLoading } = useUser();
   const [error, setError] = useState<string>("");
-  /* 
-  TODOs
-  - disable login button while fields are empty
-  - add login indicator while loading
-  - add logout option
-  **/
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,8 +26,7 @@ export function LoginPage() {
         setError(userStatus.reason || "Your account has been blacklisted");
         return;
       }
-
-      // Successful login - navigate to reports page
+      
       navigate("/reports");
     } catch (err) {
       setError("Login failed. Please try again.");

@@ -3,7 +3,6 @@ import { userStatuses } from "../storage";
 import { UserStatusResponse } from "../types";
 const router = express.Router();
 
-// Check User status
 router.post(`/check-status`, (_req: Request, res: Response) => {
   const { email } = _req.body;
 

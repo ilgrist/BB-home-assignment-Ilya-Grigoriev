@@ -9,11 +9,6 @@ import { ReportsTable } from '../components/Report/ReportsTable';
 import { StatusBadge } from '../components/Report/StatusBadge';
 import { ViewToggle, ViewMode } from '../components/Report/ViewToggle';
 
-/*
-TODOS
-- Account for many reports?
-**/
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 
 function ReportCard({

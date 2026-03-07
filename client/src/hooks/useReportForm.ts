@@ -73,7 +73,6 @@ export function useReportForm() {
         message: `Report submitted successfully! (ID: ${response.id})`,
       });
 
-      // Reset form
       setFormData(INITIAL_FORM_DATA);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
