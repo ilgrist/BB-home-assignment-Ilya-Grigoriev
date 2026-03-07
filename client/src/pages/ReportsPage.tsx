@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { Report } from '../types/Report';
 import { getReports, updateReport } from '../api/reports';
 import { formatDate } from '../helpers/commonHelper';
+import { ReportsTableSkeleton } from '../components/Report/ReportsTableSkeleton';
+import { ReportsTableError } from '../components/Report/ReportsTableError';
+import { ReportsTableEmpty } from '../components/Report/ReportsTableEmpty';
 
-/* 
+/*
 TODOS
-- Add skeleton laoder for table
 - Account for many reports?
 **/
 
@@ -25,7 +27,7 @@ export function ReportsPage() {
   const [actionLoading, setActionLoading] = useState<Record<string, boolean>>({});
 
   const fetchReports = async () => {
-    setLoading(true);
+    setLoading(false);
     setError(null);
     try {
       const data = await getReports();
@@ -57,20 +59,11 @@ export function ReportsPage() {
     <div className="page">
       <h1>Reports List</h1>
 
-      {loading && <p className="placeholder-text">Loading reports...</p>}
+      {loading && <ReportsTableSkeleton />}
 
-      {error && !loading && (
-        <div className="alert alert-error">
-          <span>{error}</span>
-          <button className="btn btn-secondary btn-sm alert-action" onClick={fetchReports}>
-            Retry
-          </button>
-        </div>
-      )}
+      {error && !loading &&  <ReportsTableError message={error} onRetry={fetchReports} />}
 
-      {!loading && !error && reports.length === 0 && (
-        <p className="placeholder-text">No reports found.</p>
-      )}
+      {!loading && !error && reports.length === 0 && <ReportsTableEmpty />}
 
       {!loading && !error && reports.length > 0 && (
         <div className="reports-table-wrapper">

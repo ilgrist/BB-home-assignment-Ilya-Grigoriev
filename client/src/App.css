@@ -277,6 +277,39 @@ body {
   background: #fee2e2;
   color: #991b1b;
   border: 1px solid #fecaca;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.alert-error .alert-icon {
+  width: 2rem;
+  height: 2rem;
+  margin: 0;
+}
+
+.alert-error .alert-action {
+  margin-left: 0;
+}
+
+/* Empty state */
+.table-empty-state {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+}
+
+.table-empty-state__icon {
+  width: 2rem;
+  height: 2rem;
+  opacity: 0.5;
 }
 
 /* Placeholder styles for TODO sections */
@@ -306,6 +339,26 @@ body {
   margin: 0.25rem 0;
   color: var(--text-muted);
 }
+
+/* Skeleton loader */
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  display: block;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+  height: 1rem;
+}
+
+.skeleton--xs { width: 3rem; }
+.skeleton--sm { width: 6rem; }
+.skeleton--md { width: 9rem; }
+.skeleton--lg { width: 12rem; }
 
 /* Reports page */
 .reports-table-wrapper {
@@ -371,6 +424,13 @@ body {
 
 .alert-action {
   margin-left: 1rem;
+}
+
+.alert-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  vertical-align: middle;
+  margin-right: 0.5rem;
 }
 
 .login-error-message {

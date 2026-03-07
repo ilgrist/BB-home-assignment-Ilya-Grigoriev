@@ -1,8 +1,25 @@
-import { useReportForm } from '../hooks/useReportForm';
-import { SubmitAlert, FormField, IssueTypeSelect, AttachmentField } from '../components/ReportForm';
+import { useReportForm } from "../hooks/useReportForm";
+import {
+  SubmitAlert,
+  FormField,
+  IssueTypeSelect,
+  AttachmentField,
+} from "../components/ReportForm";
 
 export function ReportPage() {
-  const { formData, updateFormData, descriptionError, nameError, emailError, fileError, isFormValid, handleSubmit, submitStatus, fileInputRef, handleClearFile } = useReportForm();
+  const {
+    formData,
+    updateFormData,
+    descriptionError,
+    nameError,
+    emailError,
+    fileError,
+    isFormValid,
+    handleSubmit,
+    submitStatus,
+    fileInputRef,
+    handleClearFile,
+  } = useReportForm();
 
   return (
     <div className="page">
@@ -13,14 +30,18 @@ export function ReportPage() {
       <form onSubmit={handleSubmit} className="form">
         <IssueTypeSelect
           value={formData.issueType}
-          onChange={(value) => updateFormData('issueType', value)}
+          onChange={(value) => updateFormData("issueType", value)}
         />
 
-        <FormField id="description" label="Description *" error={descriptionError}>
+        <FormField
+          id="description"
+          label="Description *"
+          error={descriptionError}
+        >
           <textarea
             id="description"
             value={formData.description}
-            onChange={(e) => updateFormData('description', e.target.value)}
+            onChange={(e) => updateFormData("description", e.target.value)}
             placeholder="Describe the issue..."
             rows={5}
             required
@@ -32,7 +53,7 @@ export function ReportPage() {
             type="text"
             id="contactName"
             value={formData.contactName}
-            onChange={(e) => updateFormData('contactName', e.target.value)}
+            onChange={(e) => updateFormData("contactName", e.target.value)}
             placeholder="Enter your name"
             required
           />
@@ -43,7 +64,7 @@ export function ReportPage() {
             type="email"
             id="contactEmail"
             value={formData.contactEmail}
-            onChange={(e) => updateFormData('contactEmail', e.target.value)}
+            onChange={(e) => updateFormData("contactEmail", e.target.value)}
             placeholder="Enter your email"
             required
           />
@@ -53,16 +74,16 @@ export function ReportPage() {
           fileInputRef={fileInputRef}
           attachment={formData.attachment}
           error={fileError}
-          onChange={(file) => updateFormData('attachment', file)}
+          onChange={(file) => updateFormData("attachment", file)}
           onClear={handleClearFile}
         />
 
         <button
           type="submit"
           className="btn btn-primary"
-          disabled={!isFormValid || submitStatus.type === 'loading'}
+          disabled={!isFormValid || submitStatus.type === "loading"}
         >
-          {submitStatus.type === 'loading' ? 'Submitting...' : 'Submit Report'}
+          {submitStatus.type === "loading" ? "Submitting..." : "Submit Report"}
         </button>
       </form>
     </div>
